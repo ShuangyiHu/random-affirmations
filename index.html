@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Amanda 的每日肯定语</title>
+    <title>Hello tomorrow</title>
     <style>
       :root {
         --bg: #fff8f3;
@@ -279,7 +279,7 @@
       <div class="card" id="card" tabindex="0" title="点击卡片或按空格，换一句">
         <header>
           <h1>每日肯定语 · Random Affirmation</h1>
-          <div class="hint">点击卡片 / 按空格 / 点击按钮 刷新</div>
+          <div class="hint">点击卡片刷新</div>
         </header>
         <div id="quote" class="quote fade">加载中...</div>
         <div class="controls">
@@ -426,15 +426,6 @@
       card.addEventListener("click", (e) => {
         if (e.target.tagName.toLowerCase() === "button") return;
         showRandom();
-      });
-      document.addEventListener("keydown", (e) => {
-        if (e.code === "Space") {
-          e.preventDefault();
-          showRandom();
-        }
-        if (e.key === "c" && (e.ctrlKey || e.metaKey)) {
-          copyCurrent();
-        }
       });
 
       /* 初始显示一句 */

@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Amanda 的每日肯定语</title>
+    <style>
+      :root {
+        --bg: #fff8f3;
+        --card: #ffffffee;
+        --text: #3c3a36;
+        --muted: #7a746d;
+        --accent: #ff9f8c;
+        --accent-hover: #ffb7a5;
+        --ring: #f88c75;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        height: 100%;
+      }
+      body {
+        margin: 0;
+        font-family: "Segoe UI", system-ui, -apple-system, Roboto, Helvetica,
+          Arial;
+        background: radial-gradient(circle at 25% 25%, #ffeede, transparent),
+          radial-gradient(circle at 75% 35%, #fff5eb, transparent), var(--bg);
+        color: var(--text);
+        display: grid;
+        place-items: center;
+      }
+      .wrap {
+        width: min(1100px, 94vw);
+      }
+      .greeting {
+        text-align: center;
+        margin-bottom: 16px;
+      }
+      .greeting h2 {
+        font-size: 36px;
+        margin: 0;
+        color: #5c4033;
+        font-weight: 700;
+      }
+      .greeting p {
+        font-size: 18px;
+        color: var(--muted);
+        margin-top: 8px;
+      }
+      .card {
+        background: var(--card);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(0, 0, 0, 0.05);
+        border-radius: 28px;
+        padding: 56px clamp(30px, 6vw, 72px);
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+      }
+      header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        margin-bottom: 16px;
+      }
+      h1 {
+        font-size: 22px;
+        margin: 0;
+        letter-spacing: 0.5px;
+        color: var(--muted);
+        font-weight: 600;
+      }
+      .hint {
+        font-size: 13px;
+        color: var(--muted);
+      }
+      .quote {
+        font-size: clamp(26px, 3.5vw, 38px);
+        line-height: 1.6;
+        margin: 28px 0 28px;
+        color: #3c3a36;
+      }
+      .controls {
+        display: flex;
+        gap: 12px;
+        align-items: center;
+        flex-wrap: wrap;
+      }
+      button {
+        background: var(--accent);
+        color: #fff;
+        border: 0;
+        padding: 10px 18px;
+        border-radius: 10px;
+        font-weight: 600;
+        cursor: pointer;
+        font-size: 16px;
+        transition: background 0.2s ease, transform 0.15s ease;
+      }
+      button:hover {
+        background: var(--accent-hover);
+        transform: translateY(-1px);
+      }
+      button:focus {
+        outline: 2px solid var(--ring);
+        outline-offset: 3px;
+      }
+      .ghost {
+        background: transparent;
+        border: 1px solid rgba(0, 0, 0, 0.15);
+        color: var(--text);
+        font-size: 16px;
+        padding: 10px 18px;
+        border-radius: 10px;
+      }
+      footer {
+        margin-top: 14px;
+        font-size: 14px;
+        color: var(--muted);
+      }
+      .fade {
+        opacity: 0;
+        transform: translateY(6px);
+        transition: opacity 0.3s ease, transform 0.3s ease;
+      }
+      .fade.show {
+        opacity: 1;
+        transform: translateY(0);
+      }
+      .small {
+        font-size: 13px;
+        color: var(--muted);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <div class="greeting">
+        <h2>新的一天开始咯！ 🥰</h2>
+        <p>愿今天的你温暖、自信、闪闪发光。</p>
+      </div>
+      <div class="card" id="card" tabindex="0" title="点击卡片或按空格，换一句">
+        <header>
+          <h1>每日肯定语 · Random Affirmation</h1>
+          <div class="hint">点击卡片 / 按空格 / 点击按钮 刷新</div>
+        </header>
+        <div id="quote" class="quote fade">加载中...</div>
+        <div class="controls">
+          <button id="nextBtn" aria-label="换一句">🥰 换一句</button>
+          <button id="copyBtn" class="ghost" aria-label="复制这句">
+            📋 复制
+          </button>
+          <span class="small" id="counter"></span>
+        </div>
+        <footer>每天读一句，温柔、有力地开启新的一天。</footer>
+      </div>
+    </div>
+
+    <script>
+      const AFFIRMATIONS = [
+        "我正走在成为优秀 SDE 的路上。",
+        "我值得拥有一份让我充满热情的工作。",
+        "每一个早起的清晨都让我离成功更近。",
+        "我相信自己正在被理想的机会看见。",
+        "我配得上年薪 $150K+ 的职位与认可。",
+        "我专注、聪明、有毅力，我的努力会被回报。",
+        "每一次投递和练习都是向梦想迈进的一步。",
+        "我正在吸引一个信任我能力的团队。",
+        "我能沉着地面对面试，展现最真实的自己。",
+        "合适的机会正向我靠近，我正在准备迎接。",
+        "我有清晰的目标，也有实现它的勇气。",
+        "我在压力中保持清晰，在变化中保持平静。",
+        "我允许自己不完美，也依然值得被爱与尊重。",
+        "我有权选择让我平静且有力量的环境。",
+        "我正在成长为理想中的自己。",
+        "每一个小进步都值得庆祝。",
+        "我相信过程，也相信自己的节奏。",
+        "我拥有实现目标的智慧和耐心。",
+        "我值得被理解、被支持、被欣赏。",
+        "我的努力正在积累成看得见的成果。",
+        "我在挑战中学习，也在失败中成长。",
+        "我相信合适的公司在等我加入。",
+        "我能够冷静处理压力与不确定性。",
+        "我正在培养自律与稳定的习惯。",
+        "我感激每一个学习和尝试的机会。",
+        "我有能力创造我想要的生活。",
+        "我在工作中展现专业，也在生活中保持温柔。",
+        "我值得被尊重、被信任。",
+        "每一个现在的自己都比昨天更强大。",
+        "我允许自己放下焦虑，回到当下。",
+        "我相信我的未来正在慢慢成形。",
+        "我正在靠近属于我的成功与幸福。",
+        "我的心态平和、稳定而自信。",
+        "我知道我有无限的潜力等待被释放。",
+        "我选择专注于我能掌控的部分。",
+        "我能在努力与休息之间找到平衡。",
+        "我值得被爱，也值得拥有平静的生活。",
+        "我信任时间、信任自己、信任过程。",
+        "我感激每一个挑战让我更坚韧。",
+        "我允许自己偶尔慢一点，因为我始终在路上。",
+        "我能清楚地表达自己，别人也愿意倾听。",
+        "我与世界的连接是温暖的、良性的。",
+        "我对生活保持好奇和热情。",
+        "我为自己的成长感到骄傲。",
+        "我的能量吸引着积极的机会。",
+        "我能稳稳地走在梦想的路上。",
+        "我值得拥有健康、爱与丰盛。",
+        "今天的我已经足够好，也在变得更好。",
+        "我心中有光，也能照亮他人。",
+        "我相信生活正在朝着最好的方向展开。",
+      ];
+
+      const quoteEl = document.getElementById("quote");
+      const nextBtn = document.getElementById("nextBtn");
+      const copyBtn = document.getElementById("copyBtn");
+      const counter = document.getElementById("counter");
+      const card = document.getElementById("card");
+
+      let lastIndex = -1;
+      let seen = new Set();
+
+      function pickRandomIndex() {
+        if (seen.size === AFFIRMATIONS.length) seen.clear();
+        let idx;
+        do {
+          idx = Math.floor(Math.random() * AFFIRMATIONS.length);
+        } while (idx === lastIndex);
+        lastIndex = idx;
+        seen.add(idx);
+        counter.textContent = `今日已阅：${seen.size}/${AFFIRMATIONS.length}`;
+        return idx;
+      }
+
+      function showRandom() {
+        const idx = pickRandomIndex();
+        const text = AFFIRMATIONS[idx];
+        quoteEl.classList.remove("show");
+        setTimeout(() => {
+          quoteEl.textContent = text;
+          quoteEl.classList.add("show");
+        }, 80);
+      }
+
+      function copyCurrent() {
+        const text = quoteEl.textContent.trim();
+        if (!text) return;
+        navigator.clipboard
+          ?.writeText(text)
+          .then(() => {
+            copyBtn.textContent = "✅ 已复制";
+            setTimeout(() => (copyBtn.textContent = "📋 复制"), 1400);
+          })
+          .catch(() => {
+            alert("复制失败，请手动选择文本复制");
+          });
+      }
+
+      nextBtn.addEventListener("click", showRandom);
+      copyBtn.addEventListener("click", copyCurrent);
+      card.addEventListener("click", (e) => {
+        if (e.target.tagName.toLowerCase() === "button") return;
+        showRandom();
+      });
+      document.addEventListener("keydown", (e) => {
+        if (e.code === "Space") {
+          e.preventDefault();
+          showRandom();
+        }
+        if (e.key === "c" && (e.ctrlKey || e.metaKey)) {
+          copyCurrent();
+        }
+      });
+
+      window.addEventListener("DOMContentLoaded", () => {
+        showRandom();
+      });
+    </script>
+  </body>
+</html>

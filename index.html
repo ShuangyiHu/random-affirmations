@@ -144,7 +144,7 @@
         color: var(--muted);
       }
 
-      /* To-Do Section */
+      /* ===== Todo Section ===== */
       .todo-card {
         padding: 28px clamp(20px, 4vw, 40px);
       }
@@ -211,7 +211,7 @@
         align-items: center;
         gap: 10px;
       }
-      .todo-item input[type=\"checkbox\"] {
+      .todo-item input[type="checkbox"] {
         width: 18px;
         height: 18px;
       }
@@ -258,7 +258,6 @@
         background: #f1efe9;
         border-radius: 999px;
         overflow: hidden;
-        flex: 1;
       }
       .bar > span {
         display: block;
@@ -276,25 +275,27 @@
         <p>愿今天的你👩🏻‍💻温暖、自信、闪闪发光。</p>
       </div>
 
-      <!-- Affirmation -->
-      <div class="card" id="card" tabindex="0">
+      <!-- Affirmation Card -->
+      <div class="card" id="card" tabindex="0" title="点击卡片或按空格，换一句">
         <header>
           <h1>每日肯定语 · Random Affirmation</h1>
           <div class="hint">点击卡片 / 按空格 / 点击按钮 刷新</div>
         </header>
         <div id="quote" class="quote fade">加载中...</div>
         <div class="controls">
-          <button id="nextBtn">🥰 换一句</button>
-          <button id="copyBtn" class="ghost">📋 复制</button>
+          <button id="nextBtn" aria-label="换一句">🥰 换一句</button>
+          <button id="copyBtn" class="ghost" aria-label="复制这句">
+            📋 复制
+          </button>
           <span class="small" id="counter"></span>
         </div>
         <footer>每天读一句，温柔、有力地开启新的一天。</footer>
       </div>
 
-      <!-- To-Do -->
+      <!-- Todo Card -->
       <div class="card todo-card" id="todoCard">
         <div class="todo-head">
-          <h3 class="todo-title">今日待办 · To-Do</h3>
+          <h3 class="todo-title">今日待办 · To‑Do</h3>
           <div>
             <label class="todo-sub" for="todoDate">选择日期：</label>
             <input id="todoDate" class="date" type="date" />
@@ -311,7 +312,7 @@
         <ul id="todoList" class="todo-list"></ul>
         <div class="stats">
           <div>进度：<span id="statText">0/0</span></div>
-          <div class="bar"><span id="statBar"></span></div>
+          <div class="bar" style="flex: 1"><span id="statBar"></span></div>
           <div class="todo-actions">
             <button id="clearDone" class="btn-ghost">清除已完成</button>
             <button id="clearAll" class="btn-ghost">清空</button>
@@ -321,7 +322,7 @@
     </div>
 
     <script>
-      /* === 肯定语 === */
+      /* ================== 肯定语 ================== */
       const AFFIRMATIONS = [
         "我正走在成为优秀 SDE 的路上。",
         "我值得拥有一份让我充满热情的工作。",
@@ -329,13 +330,61 @@
         "我相信自己正在被理想的机会看见。",
         "我配得上年薪 $150K+ 的职位与认可。",
         "我专注、聪明、有毅力，我的努力会被回报。",
+        "每一次投递和练习都是向梦想迈进的一步。",
+        "我正在吸引一个信任我能力的团队。",
+        "我能沉着地面对面试，展现最真实的自己。",
+        "合适的机会正向我靠近，我正在准备迎接。",
+        "我有清晰的目标，也有实现它的勇气。",
+        "我在压力中保持清晰，在变化中保持平静。",
+        "我允许自己不完美，也依然值得被爱与尊重。",
+        "我有权选择让我平静且有力量的环境。",
+        "我正在成长为理想中的自己。",
+        "每一个小进步都值得庆祝。",
+        "我相信过程，也相信自己的节奏。",
+        "我拥有实现目标的智慧和耐心。",
+        "我值得被理解、被支持、被欣赏。",
+        "我的努力正在积累成看得见的成果。",
+        "我在挑战中学习，也在失败中成长。",
+        "我相信合适的公司在等我加入。",
+        "我能够冷静处理压力与不确定性。",
+        "我正在培养自律与稳定的习惯。",
+        "我感激每一个学习和尝试的机会。",
+        "我有能力创造我想要的生活。",
+        "我在工作中展现专业，也在生活中保持温柔。",
+        "我值得被尊重、被信任。",
+        "每一个现在的自己都比昨天更强大。",
+        "我允许自己放下焦虑，回到当下。",
+        "我相信我的未来正在慢慢成形。",
+        "我正在靠近属于我的成功与幸福。",
+        "我的心态平和、稳定而自信。",
+        "我知道我有无限的潜力等待被释放。",
+        "我选择专注于我能掌控的部分。",
+        "我能在努力与休息之间找到平衡。",
+        "我值得被爱，也值得拥有平静的生活。",
+        "我信任时间、信任自己、信任过程。",
+        "我感激每一个挑战让我更坚韧。",
+        "我允许自己偶尔慢一点，因为我始终在路上。",
+        "我能清楚地表达自己，别人也愿意倾听。",
+        "我与世界的连接是温暖的、良性的。",
+        "我对生活保持好奇和热情。",
+        "我为自己的成长感到骄傲。",
+        "我的能量吸引着积极的机会。",
+        "我能稳稳地走在梦想的路上。",
+        "我值得拥有健康、爱与丰盛。",
+        "今天的我已经足够好，也在变得更好。",
+        "我心中有光，也能照亮他人。",
+        "我相信生活正在朝着最好的方向展开。",
       ];
+
       const quoteEl = document.getElementById("quote");
       const nextBtn = document.getElementById("nextBtn");
       const copyBtn = document.getElementById("copyBtn");
       const counter = document.getElementById("counter");
-      let lastIndex = -1,
-        seen = new Set();
+      const card = document.getElementById("card");
+
+      let lastIndex = -1;
+      let seen = new Set();
+
       function pickRandomIndex() {
         if (seen.size === AFFIRMATIONS.length) seen.clear();
         let idx;
@@ -347,6 +396,7 @@
         counter.textContent = `今日已阅：${seen.size}/${AFFIRMATIONS.length}`;
         return idx;
       }
+
       function showRandom() {
         const idx = pickRandomIndex();
         const text = AFFIRMATIONS[idx];
@@ -356,15 +406,44 @@
           quoteEl.classList.add("show");
         }, 80);
       }
-      nextBtn.onclick = showRandom;
-      copyBtn.onclick = () =>
-        navigator.clipboard.writeText(quoteEl.textContent);
+
+      function copyCurrent() {
+        const text = quoteEl.textContent.trim();
+        if (!text) return;
+        navigator.clipboard
+          ?.writeText(text)
+          .then(() => {
+            copyBtn.textContent = "✅ 已复制";
+            setTimeout(() => (copyBtn.textContent = "📋 复制"), 1400);
+          })
+          .catch(() => {
+            alert("复制失败，请手动选择文本复制");
+          });
+      }
+
+      nextBtn.addEventListener("click", showRandom);
+      copyBtn.addEventListener("click", copyCurrent);
+      card.addEventListener("click", (e) => {
+        if (e.target.tagName.toLowerCase() === "button") return;
+        showRandom();
+      });
+      document.addEventListener("keydown", (e) => {
+        if (e.code === "Space") {
+          e.preventDefault();
+          showRandom();
+        }
+        if (e.key === "c" && (e.ctrlKey || e.metaKey)) {
+          copyCurrent();
+        }
+      });
+
+      /* 初始显示一句 */
       window.addEventListener("DOMContentLoaded", () => {
         showRandom();
         initTodo();
       });
 
-      /* === To-Do === */
+      /* ================== Todo ================== */
       const todoDateEl = document.getElementById("todoDate");
       const todoInput = document.getElementById("todoInput");
       const addBtn = document.getElementById("addBtn");
@@ -375,103 +454,134 @@
       const clearAll = document.getElementById("clearAll");
 
       function fmtDate(d) {
-        return d.toISOString().split("T")[0];
+        const y = d.getFullYear();
+        const m = String(d.getMonth() + 1).padStart(2, "0");
+        const da = String(d.getDate()).padStart(2, "0");
+        return `${y}-${m}-${da}`;
       }
-      function keyFor(date) {
-        return "todo-" + date;
+
+      function keyFor(dateStr) {
+        return `todo-${dateStr}`;
       }
-      function load(date) {
+
+      function load(dateStr) {
         try {
-          return JSON.parse(localStorage.getItem(keyFor(date)) || "[]");
+          return JSON.parse(localStorage.getItem(keyFor(dateStr)) || "[]");
         } catch {
           return [];
         }
       }
-      function save(date, items) {
-        localStorage.setItem(keyFor(date), JSON.stringify(items));
+
+      function save(dateStr, items) {
+        localStorage.setItem(keyFor(dateStr), JSON.stringify(items));
       }
-      function render(date) {
-        const items = load(date);
+
+      function render(dateStr) {
+        const items = load(dateStr);
         todoList.innerHTML = "";
         items.forEach((it, i) => {
           const li = document.createElement("li");
           li.className = "todo-item";
-          li.innerHTML = `<label><input type='checkbox' ${
-            it.done ? "checked" : ""
-          } data-idx='${i}'/><span class='todo-text ${
-            it.done ? "done" : ""
-          }' contenteditable='true' data-idx='${i}'>${it.text}</span></label>
-          <div class='todo-actions'><button class='btn-ghost' data-act='up' data-idx='${i}'>↑</button><button class='btn-ghost' data-act='down' data-idx='${i}'>↓</button><button class='btn-ghost btn-danger' data-act='del' data-idx='${i}'>删除</button></div>`;
+          li.innerHTML = `
+          <label>
+            <input type="checkbox" ${it.done ? "checked" : ""} data-idx="${i}"/>
+            <span class="todo-text ${
+              it.done ? "done" : ""
+            }" contenteditable="true" data-idx="${i}">${it.text}</span>
+          </label>
+          <div class="todo-actions">
+            <button class="btn-ghost" data-act="up" data-idx="${i}">↑</button>
+            <button class="btn-ghost" data-act="down" data-idx="${i}">↓</button>
+            <button class="btn-ghost btn-danger" data-act="del" data-idx="${i}">删除</button>
+          </div>`;
           todoList.appendChild(li);
         });
         const done = items.filter((x) => x.done).length;
         statText.textContent = `${done}/${items.length}`;
-        statBar.style.width = items.length
-          ? Math.round((done / items.length) * 100) + "%"
-          : "0%";
+        const pct = items.length ? Math.round((done / items.length) * 100) : 0;
+        statBar.style.width = pct + "%";
       }
+
       function initTodo() {
         const today = fmtDate(new Date());
         todoDateEl.value = today;
         render(today);
-        todoDateEl.onchange = () => render(todoDateEl.value);
+
+        todoDateEl.addEventListener("change", () => {
+          render(todoDateEl.value);
+        });
+
         function add() {
           const text = todoInput.value.trim();
           if (!text) return;
           const d = todoDateEl.value;
           const items = load(d);
-          items.push({ text, done: false });
+          items.push({ id: Date.now(), text, done: false });
           save(d, items);
           todoInput.value = "";
           render(d);
         }
-        addBtn.onclick = add;
-        todoInput.onkeydown = (e) => {
+
+        addBtn.addEventListener("click", add);
+        todoInput.addEventListener("keydown", (e) => {
           if (e.key === "Enter") add();
-        };
-        todoList.onchange = (e) => {
-          const idx = e.target.dataset.idx;
+        });
+
+        todoList.addEventListener("change", (e) => {
+          const idx = e.target.getAttribute("data-idx");
           if (idx == null) return;
           const d = todoDateEl.value;
           const items = load(d);
           items[idx].done = e.target.checked;
           save(d, items);
           render(d);
-        };
-        todoList.oninput = (e) => {
+        });
+
+        todoList.addEventListener("input", (e) => {
           if (!e.target.classList.contains("todo-text")) return;
+          const idx = e.target.getAttribute("data-idx");
           const d = todoDateEl.value;
           const items = load(d);
-          items[e.target.dataset.idx].text = e.target.textContent.trim();
+          items[idx].text = e.target.textContent.trim();
           save(d, items);
-        };
-        todoList.onclick = (e) => {
-          const act = e.target.dataset.act;
+        });
+
+        todoList.addEventListener("click", (e) => {
+          const act = e.target.getAttribute("data-act");
           if (!act) return;
-          const idx = +e.target.dataset.idx;
+          const idx = +e.target.getAttribute("data-idx");
           const d = todoDateEl.value;
           const items = load(d);
-          if (act === "del") items.splice(idx, 1);
-          if (act === "up" && idx > 0)
-            [items[idx - 1], items[idx]] = [items[idx], items[idx - 1]];
-          if (act === "down" && idx < items.length - 1)
-            [items[idx], items[idx + 1]] = [items[idx + 1], items[idx]];
+          if (act === "del") {
+            items.splice(idx, 1);
+          }
+          if (act === "up" && idx > 0) {
+            const t = items[idx];
+            items[idx] = items[idx - 1];
+            items[idx - 1] = t;
+          }
+          if (act === "down" && idx < items.length - 1) {
+            const t = items[idx];
+            items[idx] = items[idx + 1];
+            items[idx + 1] = t;
+          }
           save(d, items);
           render(d);
-        };
-        clearDone.onclick = () => {
+        });
+
+        clearDone.addEventListener("click", () => {
           const d = todoDateEl.value;
-          save(
-            d,
-            load(d).filter((i) => !i.done)
-          );
+          const items = load(d).filter((i) => !i.done);
+          save(d, items);
           render(d);
-        };
-        clearAll.onclick = () => {
+        });
+
+        clearAll.addEventListener("click", () => {
           const d = todoDateEl.value;
-          if (confirm("确认清空该日任务？")) save(d, []);
+          if (!confirm("确认清空该日的所有任务？")) return;
+          save(d, []);
           render(d);
-        };
+        });
       }
     </script>
   </body>

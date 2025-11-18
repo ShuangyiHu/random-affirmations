@@ -498,28 +498,26 @@
           const li = document.createElement("li");
           li.className = "todo-item";
           li.innerHTML = `
-            <label>
-              <input type="checkbox" ${
-                it.done ? "checked" : ""
-              } data-idx="${i}"/>
-              <span class="todo-text ${
-                it.done ? "done" : ""
-              }" data-idx="${i}">${it.text}</span>
-            </label>
-            <div class="todo-time">
-              <input type="time" class="start-time" value="${
-                it.start || ""
-              }" data-idx="${i}"/> -
-              <input type="time" class="end-time" value="${
-                it.end || ""
-              }" data-idx="${i}"/>
-            </div>
-            <div class="todo-actions">
-              <button class="btn-ghost edit" data-act="edit" data-idx="${i}">编辑</button>
-              <button class="btn-ghost" data-act="up" data-idx="${i}">↑</button>
-              <button class="btn-ghost" data-act="down" data-idx="${i}">↓</button>
-              <button class="btn-ghost btn-danger" data-act="del" data-idx="${i}">删除</button>
-            </div>`;
+      <label>
+        <input type="checkbox" ${it.done ? "checked" : ""} data-idx="${i}"/>
+        <span class="todo-text ${it.done ? "done" : ""}" data-idx="${i}">${
+            it.text
+          }</span>
+      </label>
+      <div class="todo-time">
+        <input type="time" class="start-time" value="${
+          it.start || ""
+        }" data-idx="${i}"/> -
+        <input type="time" class="end-time" value="${
+          it.end || ""
+        }" data-idx="${i}"/>
+      </div>
+      <div class="todo-actions">
+        <button class="btn-ghost edit" data-act="edit" data-idx="${i}">编辑</button>
+        <button class="btn-ghost" data-act="up" data-idx="${i}">↑</button>
+        <button class="btn-ghost" data-act="down" data-idx="${i}">↓</button>
+        <button class="btn-ghost btn-danger" data-act="del" data-idx="${i}">删除</button>
+      </div>`;
           todoList.appendChild(li);
         });
 

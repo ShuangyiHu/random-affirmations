@@ -468,6 +468,14 @@
       const clearDone = document.getElementById("clearDone");
       const clearAll = document.getElementById("clearAll");
 
+      /* ===== 按钮统一样式 ===== */
+      const buttonStyles = {
+        base: "border:none;color:#fff;padding:6px 10px;border-radius:6px;font-weight:400;font-size:13px;cursor:pointer;",
+        edit: "background:#fbbf24;", // 黄色 - 编辑
+        move: "background:#f97316;", // 橙色 - 上下移动
+        delete: "background:#ef4444;", // 红色 - 删除
+      };
+
       function fmtDate(d) {
         const y = d.getFullYear();
         const m = String(d.getMonth() + 1).padStart(2, "0");
@@ -513,10 +521,18 @@
         }" data-idx="${i}"/>
       </div>
       <div class="todo-actions">
-        <button class="btn-ghost edit" style="background:#fbbf24;color:#fff;border:none;padding:6px 10px;border-radius:6px;" data-act="edit" data-idx="${i}">编辑</button>
-        <button class="btn-ghost" style="background:#f37c6b;color:#fff;border:none;padding:6px 10px;border-radius:6px;" data-act="up" data-idx="${i}">↑</button>
-        <button class="btn-ghost" style="background:#f37c6b;color:#fff;border:none;padding:6px 10px;border-radius:6px;" data-act="down" data-idx="${i}">↓</button>
-        <button class="btn-ghost btn-danger delete" style="background:#ef4444;color:#fff;border:none;padding:6px 10px;border-radius:6px;" data-act="del" data-idx="${i}">删除</button>
+        <button class="btn edit" style="${
+          buttonStyles.base + buttonStyles.edit
+        }" data-act="edit" data-idx="${i}">编辑</button>
+        <button class="btn move" style="${
+          buttonStyles.base + buttonStyles.move
+        }" data-act="up" data-idx="${i}">↑</button>
+        <button class="btn move" style="${
+          buttonStyles.base + buttonStyles.move
+        }" data-act="down" data-idx="${i}">↓</button>
+        <button class="btn delete" style="${
+          buttonStyles.base + buttonStyles.delete
+        }" data-act="del" data-idx="${i}">删除</button>
       </div>`;
           todoList.appendChild(li);
         });

@@ -211,10 +211,19 @@
         align-items: center;
         gap: 10px;
       }
-      .todo-item input[type="checkbox"] {
-        width: 18px;
-        height: 18px;
+      .todo-time {
+        display: flex;
+        align-items: center;
+        gap: 4px;
       }
+      .todo-time input {
+        width: 90px;
+        border: 1px solid var(--line);
+        border-radius: 6px;
+        padding: 4px;
+        font-size: 13px;
+      }
+
       .todo-text {
         flex: 1;
       }
@@ -224,7 +233,22 @@
       }
       .todo-actions {
         display: flex;
-        gap: 8px;
+        gap: 6px;
+      }
+      .todo-actions button {
+        border: none;
+        background: var(--accent);
+        color: #fff;
+        padding: 6px 10px;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 13px;
+      }
+      .todo-actions .edit {
+        background: #fbbf24;
+      }
+      .todo-actions .delete {
+        background: #ef4444;
       }
       .btn-ghost {
         background: transparent;
@@ -474,23 +498,86 @@
           const li = document.createElement("li");
           li.className = "todo-item";
           li.innerHTML = `
-          <label>
-            <input type="checkbox" ${it.done ? "checked" : ""} data-idx="${i}"/>
-            <span class="todo-text ${
-              it.done ? "done" : ""
-            }" contenteditable="true" data-idx="${i}">${it.text}</span>
-          </label>
-          <div class="todo-actions">
-            <button class="btn-ghost" data-act="up" data-idx="${i}">↑</button>
-            <button class="btn-ghost" data-act="down" data-idx="${i}">↓</button>
-            <button class="btn-ghost btn-danger" data-act="del" data-idx="${i}">删除</button>
-          </div>`;
+            <label>
+              <input type="checkbox" ${
+                it.done ? "checked" : ""
+              } data-idx="${i}"/>
+              <span class="todo-text ${
+                it.done ? "done" : ""
+              }" data-idx="${i}">${it.text}</span>
+            </label>
+            <div class="todo-time">
+              <input type="time" class="start-time" value="${
+                it.start || ""
+              }" data-idx="${i}"/> -
+              <input type="time" class="end-time" value="${
+                it.end || ""
+              }" data-idx="${i}"/>
+            </div>
+            <div class="todo-actions">
+              <button class="btn-ghost edit" data-act="edit" data-idx="${i}">编辑</button>
+              <button class="btn-ghost" data-act="up" data-idx="${i}">↑</button>
+              <button class="btn-ghost" data-act="down" data-idx="${i}">↓</button>
+              <button class="btn-ghost btn-danger" data-act="del" data-idx="${i}">删除</button>
+            </div>`;
           todoList.appendChild(li);
         });
+
         const done = items.filter((x) => x.done).length;
         statText.textContent = `${done}/${items.length}`;
         const pct = items.length ? Math.round((done / items.length) * 100) : 0;
         statBar.style.width = pct + "%";
+
+        todoList.onchange = (e) => {
+          const idx = e.target.dataset.idx;
+          if (idx == null) return;
+          const d = todoDateEl.value;
+          const items = load(d);
+
+          if (e.target.type === "time") {
+            const key = e.target.classList.contains("start-time")
+              ? "start"
+              : "end";
+            items[idx][key] = e.target.value;
+            save(d, items);
+          } else if (e.target.type === "checkbox") {
+            items[idx].done = e.target.checked;
+            save(d, items);
+            render(d);
+          }
+        };
+
+        todoList.onclick = (e) => {
+          const act = e.target.dataset.act;
+          if (!act) return;
+          const idx = +e.target.dataset.idx;
+          const d = todoDateEl.value;
+          const items = load(d);
+
+          if (act === "edit") {
+            const newText = prompt("编辑任务内容：", items[idx].text);
+            if (newText !== null) {
+              items[idx].text = newText.trim();
+              save(d, items);
+              render(d);
+            }
+          }
+          if (act === "del") {
+            items.splice(idx, 1);
+            save(d, items);
+            render(d);
+          }
+          if (act === "up" && idx > 0) {
+            [items[idx - 1], items[idx]] = [items[idx], items[idx - 1]];
+            save(d, items);
+            render(d);
+          }
+          if (act === "down" && idx < items.length - 1) {
+            [items[idx + 1], items[idx]] = [items[idx], items[idx + 1]];
+            save(d, items);
+            render(d);
+          }
+        };
       }
 
       function initTodo() {
@@ -498,81 +585,37 @@
         todoDateEl.value = today;
         render(today);
 
-        todoDateEl.addEventListener("change", () => {
-          render(todoDateEl.value);
-        });
+        todoDateEl.onchange = () => render(todoDateEl.value);
 
         function add() {
           const text = todoInput.value.trim();
           if (!text) return;
           const d = todoDateEl.value;
           const items = load(d);
-          items.push({ id: Date.now(), text, done: false });
+          items.push({ id: Date.now(), text, done: false, start: "", end: "" });
           save(d, items);
           todoInput.value = "";
           render(d);
         }
 
-        addBtn.addEventListener("click", add);
-        todoInput.addEventListener("keydown", (e) => {
+        addBtn.onclick = add;
+        todoInput.onkeydown = (e) => {
           if (e.key === "Enter") add();
-        });
+        };
 
-        todoList.addEventListener("change", (e) => {
-          const idx = e.target.getAttribute("data-idx");
-          if (idx == null) return;
-          const d = todoDateEl.value;
-          const items = load(d);
-          items[idx].done = e.target.checked;
-          save(d, items);
-          render(d);
-        });
-
-        todoList.addEventListener("input", (e) => {
-          if (!e.target.classList.contains("todo-text")) return;
-          const idx = e.target.getAttribute("data-idx");
-          const d = todoDateEl.value;
-          const items = load(d);
-          items[idx].text = e.target.textContent.trim();
-          save(d, items);
-        });
-
-        todoList.addEventListener("click", (e) => {
-          const act = e.target.getAttribute("data-act");
-          if (!act) return;
-          const idx = +e.target.getAttribute("data-idx");
-          const d = todoDateEl.value;
-          const items = load(d);
-          if (act === "del") {
-            items.splice(idx, 1);
-          }
-          if (act === "up" && idx > 0) {
-            const t = items[idx];
-            items[idx] = items[idx - 1];
-            items[idx - 1] = t;
-          }
-          if (act === "down" && idx < items.length - 1) {
-            const t = items[idx];
-            items[idx] = items[idx + 1];
-            items[idx + 1] = t;
-          }
-          save(d, items);
-          render(d);
-        });
-
-        clearDone.addEventListener("click", () => {
+        clearDone.onclick = () => {
           const d = todoDateEl.value;
           const items = load(d).filter((i) => !i.done);
           save(d, items);
           render(d);
-        });
+        };
 
-        clearAll.addEventListener("click", () => {
+        clearAll.onclick = () => {
           const d = todoDateEl.value;
           if (!confirm("确认清空该日的所有任务？")) return;
           save(d, []);
           render(d);
-        });
+        };
       }
     </script>
   </body>

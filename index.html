@@ -508,9 +508,9 @@
           li.innerHTML = `
       <label>
         <input type="checkbox" ${it.done ? "checked" : ""} data-idx="${i}"/>
-        <span class="todo-text ${it.done ? "done" : ""}" data-idx="${i}">${
-            it.text
-          }</span>
+        <span class="todo-text ${
+          it.done ? "done" : ""
+        }" data-idx="${i}" contenteditable="false">${it.text}</span>
       </label>
       <div class="todo-time">
         <input type="time" class="start-time" value="${
@@ -521,16 +521,16 @@
         }" data-idx="${i}"/>
       </div>
       <div class="todo-actions">
-        <button class="btn edit" style="${
+        <button class="btn" style="${
           buttonStyles.base + buttonStyles.edit
         }" data-act="edit" data-idx="${i}">编辑</button>
-        <button class="btn move" style="${
+        <button class="btn" style="${
           buttonStyles.base + buttonStyles.move
         }" data-act="up" data-idx="${i}">↑</button>
-        <button class="btn move" style="${
+        <button class="btn" style="${
           buttonStyles.base + buttonStyles.move
         }" data-act="down" data-idx="${i}">↓</button>
-        <button class="btn delete" style="${
+        <button class="btn" style="${
           buttonStyles.base + buttonStyles.delete
         }" data-act="del" data-idx="${i}">删除</button>
       </div>`;
@@ -569,13 +569,25 @@
           const items = load(d);
 
           if (act === "edit") {
-            const newText = prompt("编辑任务内容：", items[idx].text);
-            if (newText !== null) {
-              items[idx].text = newText.trim();
-              save(d, items);
-              render(d);
+            const textSpan = todoList.querySelector(
+              `.todo-text[data-idx='${idx}']`
+            );
+            if (textSpan) {
+              textSpan.setAttribute("contenteditable", "true");
+              textSpan.focus();
+              document.execCommand("selectAll", false, null);
+              textSpan.addEventListener(
+                "blur",
+                () => {
+                  textSpan.setAttribute("contenteditable", "false");
+                  items[idx].text = textSpan.textContent.trim();
+                  save(d, items);
+                },
+                { once: true }
+              );
             }
           }
+
           if (act === "del") {
             items.splice(idx, 1);
             save(d, items);

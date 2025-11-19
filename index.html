@@ -290,6 +290,65 @@
         width: 0%;
         transition: width 0.25s ease;
       }
+      /* ===== 两卡片并排布局 ===== */
+      .flex-row {
+        display: flex;
+        gap: 20px;
+        flex-wrap: wrap;
+      }
+
+      .flex-left {
+        flex: 2; /* Todo 更大 */
+      }
+
+      .flex-right {
+        flex: 1; /* 心情卡片更小 */
+        min-width: 260px;
+      }
+
+      /* ===== 心情卡片样式 ===== */
+      .mood-card {
+        background: var(--card);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(0, 0, 0, 0.05);
+        border-radius: 20px;
+        padding: 24px 28px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+      }
+
+      .mood-title {
+        font-size: 20px;
+        color: #5c4033;
+        margin: 0 0 14px;
+        font-weight: 700;
+      }
+
+      .mood-label {
+        font-size: 13px;
+        color: var(--muted);
+        margin-bottom: 4px;
+      }
+
+      .mood-select,
+      .mood-text {
+        width: 100%;
+        border: 1px solid var(--line);
+        border-radius: 10px;
+        padding: 10px 12px;
+        font-size: 14px;
+        margin-bottom: 14px;
+      }
+
+      .mood-text {
+        height: 80px;
+        resize: vertical;
+      }
+
+      .mood-select:focus,
+      .mood-text:focus {
+        border-color: var(--ring);
+        box-shadow: 0 0 0 2px #f88c7530;
+      }
     </style>
   </head>
   <body>
@@ -316,30 +375,59 @@
         <footer>每天读一句，温柔、有力地开启新的一天。</footer>
       </div>
 
-      <!-- Todo Card -->
-      <div class="card todo-card" id="todoCard">
-        <div class="todo-head">
-          <h3 class="todo-title">今日待办 · To‑Do</h3>
-          <div>
-            <label class="todo-sub" for="todoDate">选择日期：</label>
-            <input id="todoDate" class="date" type="date" />
+      <div class="flex-row">
+        <div class="flex-left">
+          <!-- Todo Card -->
+          <div class="card todo-card" id="todoCard">
+            <div class="todo-head">
+              <h3 class="todo-title">今日待办 · To‑Do</h3>
+              <div>
+                <label class="todo-sub" for="todoDate">选择日期：</label>
+                <input id="todoDate" class="date" type="date" />
+              </div>
+            </div>
+            <div class="todo-row">
+              <input
+                id="todoInput"
+                class="todo-input"
+                placeholder="写下你今天要完成的一件小事… 回车添加"
+              />
+              <button id="addBtn" class="btn-ghost">添加</button>
+            </div>
+            <ul id="todoList" class="todo-list"></ul>
+            <div class="stats">
+              <div>进度：<span id="statText">0/0</span></div>
+              <div class="bar" style="flex: 1"><span id="statBar"></span></div>
+              <div class="todo-actions">
+                <button id="clearDone" class="btn-ghost">清除已完成</button>
+                <button id="clearAll" class="btn-ghost">清空</button>
+              </div>
+            </div>
           </div>
         </div>
-        <div class="todo-row">
-          <input
-            id="todoInput"
-            class="todo-input"
-            placeholder="写下你今天要完成的一件小事… 回车添加"
-          />
-          <button id="addBtn" class="btn-ghost">添加</button>
-        </div>
-        <ul id="todoList" class="todo-list"></ul>
-        <div class="stats">
-          <div>进度：<span id="statText">0/0</span></div>
-          <div class="bar" style="flex: 1"><span id="statBar"></span></div>
-          <div class="todo-actions">
-            <button id="clearDone" class="btn-ghost">清除已完成</button>
-            <button id="clearAll" class="btn-ghost">清空</button>
+
+        <!-- 右 —— Mood -->
+        <div class="flex-right">
+          <div class="mood-card">
+            <h3 class="mood-title">今日心情 · Mood</h3>
+
+            <label class="mood-label">心情：</label>
+            <select id="moodSelect" class="mood-select">
+              <option value="">请选择</option>
+              <option>😊 开心</option>
+              <option>😌 平静</option>
+              <option>😢 难过</option>
+              <option>😤 生气</option>
+              <option>😟 鸭力大</option>
+              <option>🤩 兴奋</option>
+            </select>
+
+            <label class="mood-label">Joys in life: </label>
+            <textarea
+              id="moodText"
+              class="mood-text"
+              placeholder="What are you most grateful for today? 🍀"
+            ></textarea>
           </div>
         </div>
       </div>

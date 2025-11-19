@@ -349,13 +349,28 @@
         border-color: var(--ring);
         box-shadow: 0 0 0 2px #f88c7530;
       }
+
+      .joy-row {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 12px;
+      }
+
+      .joy-number {
+        width: 22px;
+        font-size: 14px;
+        color: var(--muted);
+        cursor: pointer; /* 点击变成可点击 */
+        user-select: none;
+      }
+
       .joy-input {
-        width: 100%;
+        flex: 1;
         border: 1px solid var(--line);
         border-radius: 10px;
         padding: 10px 12px;
         font-size: 14px;
-        margin-bottom: 12px;
       }
 
       .joy-input:focus {
@@ -421,50 +436,33 @@
         </div>
 
         <!-- 右 —— Mood -->
-        <div class="flex-right">
-          <div class="mood-card">
-            <h3 class="mood-title">今日心情 · Mood</h3>
+        <label class="mood-label">Joys in life</label>
 
-            <label class="mood-label">心情：</label>
-            <select id="moodSelect" class="mood-select">
-              <option value="">请选择</option>
-              <option>😊 开心</option>
-              <option>😌 平静</option>
-              <option>😢 难过</option>
-              <option>😤 生气</option>
-              <option>😟 鸭力大</option>
-              <option>🤩 兴奋</option>
-            </select>
+        <div class="joy-row">
+          <label for="joy1" class="joy-number">1.</label>
+          <input
+            id="joy1"
+            class="joy-input"
+            placeholder="今天让我最感激的是什么？ 🍀"
+          />
+        </div>
 
-            <label class="mood-label">Joys in life </label>
+        <div class="joy-row">
+          <label for="joy2" class="joy-number">2.</label>
+          <input
+            id="joy2"
+            class="joy-input"
+            placeholder="哪件小事给了我温暖或力量？ ✨"
+          />
+        </div>
 
-            <div>
-              <label class="mood-label">1. </label
-              ><input
-                id="joy1"
-                class="joy-input"
-                placeholder="今天让我最感激的是什么？ 🍀"
-              />
-            </div>
-
-            <div>
-              <label class="mood-label">2. </label
-              ><input
-                id="joy2"
-                class="joy-input"
-                placeholder="哪件小事给了我温暖或力量？ ✨"
-              />
-            </div>
-
-            <div>
-              <label class="mood-label">3. </label
-              ><input
-                id="joy3"
-                class="joy-input"
-                placeholder="今天我想特别感谢什么？ 💛"
-              />
-            </div>
-          </div>
+        <div class="joy-row">
+          <label for="joy3" class="joy-number">3.</label>
+          <input
+            id="joy3"
+            class="joy-input"
+            placeholder="今天我想特别感谢什么？ 💛"
+          />
         </div>
       </div>
     </div>

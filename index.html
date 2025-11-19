@@ -11,7 +11,15 @@
   <body>
     <div class="wrap">
       <div class="greeting">
-        <h2>新的一天开始了！🙌</h2>
+        <div class="greet-row">
+          <h2>新的一天开始了！🙌</h2>
+
+          <div class="date-wrap">
+            <label for="globalDate" class="date-label">📅</label>
+            <input id="globalDate" class="date" type="date" />
+          </div>
+        </div>
+
         <p>愿今天的你👩🏻‍💻温暖、自信、闪闪发光。</p>
       </div>
 
@@ -31,14 +39,6 @@
         </div>
 
         <footer>每天读一句，温柔、有力地开启新的一天。</footer>
-      </div>
-
-      <!-- 全局日期选择 -->
-      <div class="card" style="padding: 20px 28px">
-        <label class="todo-sub" style="font-size: 15px; color: #5c4033"
-          >选择日期：</label
-        >
-        <input id="globalDate" class="date" type="date" />
       </div>
 
       <div class="flex-row">

@@ -426,18 +426,22 @@
       const counter = document.getElementById("counter");
       const card = document.getElementById("card");
 
-      let lastIndex = -1;
-      let seen = new Set();
+      let pool = [...Array(AFFIRMATIONS.length).keys()]; // 0..n-1
 
       function pickRandomIndex() {
-        if (seen.size === AFFIRMATIONS.length) seen.clear();
-        let idx;
-        do {
-          idx = Math.floor(Math.random() * AFFIRMATIONS.length);
-        } while (idx === lastIndex or idx in seen);
-        lastIndex = idx;
-        seen.add(idx);
-        counter.textContent = `今日已阅：${seen.size}/${AFFIRMATIONS.length}`;
+        if (pool.length === 0) {
+          pool = [...Array(AFFIRMATIONS.length).keys()];
+        }
+
+        const r = Math.floor(Math.random() * pool.length);
+        const idx = pool[r];
+
+        // 删除已用
+        pool.splice(r, 1);
+
+        const viewed = AFFIRMATIONS.length - pool.length;
+        counter.textContent = `今日已阅：${viewed}/${AFFIRMATIONS.length}`;
+
         return idx;
       }
 

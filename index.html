@@ -349,6 +349,20 @@
         border-color: var(--ring);
         box-shadow: 0 0 0 2px #f88c7530;
       }
+      .joy-input {
+        width: 100%;
+        border: 1px solid var(--line);
+        border-radius: 10px;
+        padding: 10px 12px;
+        font-size: 14px;
+        margin-bottom: 12px;
+      }
+
+      .joy-input:focus {
+        border-color: var(--ring);
+        box-shadow: 0 0 0 2px #f88c7530;
+        outline: none;
+      }
     </style>
   </head>
   <body>
@@ -422,12 +436,30 @@
               <option>🤩 兴奋</option>
             </select>
 
-            <label class="mood-label">Joys in life: </label>
-            <textarea
-              id="moodText"
-              class="mood-text"
-              placeholder="What are you most grateful for today? 🍀"
-            ></textarea>
+            <label class="mood-label"
+              >Joys in life · What are you most grateful for today?
+            </label>
+
+            <span>1. </span
+            ><input
+              id="joy1"
+              class="joy-input"
+              placeholder="今天让我最感激的是什么？ 🍀"
+            />
+
+            <span>2. </span
+            ><input
+              id="joy2"
+              class="joy-input"
+              placeholder="哪件小事给了我温暖或力量？ ✨"
+            />
+
+            <span>3. </span
+            ><input
+              id="joy3"
+              class="joy-input"
+              placeholder="今天我想特别感谢什么？ 💛"
+            />
           </div>
         </div>
       </div>
